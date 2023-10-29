@@ -119,6 +119,7 @@ stages:
               chartType: 'Repo'
               chartName: 'bitnami/nginx'  # Helm chart name in the Bitnami repository
               releaseName: 'nginx-release'  # Replace with your desired Helm release name
+              install: true
               
               #overrideValues: |
                # image.repository=$(containerRegistry)/$(imageRepository)
