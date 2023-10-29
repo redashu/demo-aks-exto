@@ -76,3 +76,17 @@ stages:
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
 
+          - task: HelmDeploy@0
+            displayName: Deploy Helm Chart
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'ext-360-cluster-ashu-project'  # Replace with your Kubernetes service connection name
+              namespace: 'ashu-project'  # Replace with your target Kubernetes namespace
+              command: 'upgrade'
+              chartType: 'Path'
+              chartPath: '$(Pipeline.Workspace)/manifests/ashu-chart'  # Path to your Helm chart
+              releaseName: 'ashu-release-test'  # Replace with your Helm release name
+              overrideValues: |
+                image.repository=$(containerRegistry)/$(imageRepository)
+                image.tag=$(tag)
+                imagePullSecrets[0].name=$(imagePullSecret)       
