@@ -89,4 +89,38 @@ stages:
               overrideValues: |
                 image.repository=$(containerRegistry)/$(imageRepository)
                 image.tag=$(tag)
-                imagePullSecrets[0].name=$(imagePullSecret)       
+                imagePullSecrets[0].name=$(imagePullSecret)     
+
+
+          - task: HelmInstaller@1
+            displayName: 'Install Helm'
+            inputs:
+              helmVersionToInstall: 'latest'
+
+          - task: HelmInstaller@1
+            displayName: 'Add Bitnami Helm Repository'
+            inputs:
+              command: 'repo add'
+              repoName: 'bitnami'
+              repoURL: 'https://charts.bitnami.com/bitnami'
+
+          - task: HelmInstaller@1
+            displayName: 'Update Helm Repositories'
+            inputs:
+              command: 'repo update'
+
+          - task: HelmDeploy@0
+            displayName: 'Deploy Helm Chart'
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceConnection: 'ext-360-cluster-ashu-project'  # Replace with your Kubernetes service connection name
+              namespace: 'your-k8s-namespace'  # Replace with your target Kubernetes namespace
+              command: 'upgrade'
+              chartType: 'Repo'
+              chartName: 'bitnami/nginx'  # Helm chart name in the Bitnami repository
+              releaseName: 'nginx-release'  # Replace with your desired Helm release name
+              
+              #overrideValues: |
+               # image.repository=$(containerRegistry)/$(imageRepository)
+               # image.tag=$(tag)
+               # imagePullSecrets[0].name=$(imagePullSecret)
