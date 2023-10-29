@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: redashudemoaksexto 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redashudemoaksexto
+  template:
+    metadata:
+      labels:
+        app: redashudemoaksexto 
+    spec:
+      containers:
+        - name: redashudemoaksexto 
+          image: extoaksashu.azurecr.io/redashudemoaksexto
+          ports:
+          - containerPort: 80
